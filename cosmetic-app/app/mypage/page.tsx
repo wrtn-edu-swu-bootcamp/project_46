@@ -94,8 +94,8 @@ export default function MyPage() {
       {/* 프로필 카드 */}
       <div className="card mb-6">
         <div className="flex items-center gap-4 mb-4">
-          <div className="w-16 h-16 bg-emerald-800 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-800/20">
-            <span className="text-2xl">👤</span>
+          <div className="w-16 h-16 bg-gradient-to-br from-emerald-600 to-teal-700 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-600/30">
+            <span className="text-2xl">✨</span>
           </div>
           <div>
             <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">{user.name}</h2>
