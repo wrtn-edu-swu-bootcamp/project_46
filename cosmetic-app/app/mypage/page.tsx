@@ -44,7 +44,7 @@ export default function MyPage() {
       label: "내 피부 프로필",
       href: "/mypage/profile",
       description: "피부 타입과 고민을 설정하세요",
-      color: "bg-teal-50 text-teal-600 dark:bg-teal-900/30 dark:text-teal-400"
+      color: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400"
     },
     {
       icon: Heart,
@@ -95,7 +95,7 @@ export default function MyPage() {
       <div className="card mb-6">
         <div className="flex items-center gap-4 mb-4">
           <div className="w-16 h-16 bg-gradient-to-br from-emerald-600 to-teal-700 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-600/30">
-            <span className="text-2xl">✨</span>
+            <Droplets size={32} className="text-white" />
           </div>
           <div>
             <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">{user.name}</h2>
