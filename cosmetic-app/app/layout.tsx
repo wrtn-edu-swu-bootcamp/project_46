@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import "./globals.css";
 import BottomNav from "@/components/BottomNav";
 import PageTransition from "@/components/PageTransition";
+import Onboarding from "@/components/Onboarding";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 
 export const metadata: Metadata = {
-  title: "성분을 알면 화장법이 보인다",
-  description: "피부 타입별 맞춤 성분 사전",
+  title: "더마북 | Dermabook",
+  description: "식약처 공공데이터 기반 화장품 성분 정보 및 AI 뷰티 상담",
 };
 
 export default function RootLayout({
@@ -27,6 +28,7 @@ export default function RootLayout({
       </head>
       <body>
         <ThemeProvider>
+          <Onboarding />
           <div className="app-container">
             <main className="main-content">
               <PageTransition>

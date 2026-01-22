@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Heart, AlertCircle, CheckCircle, Clock, Users } from "lucide-react";
+import { ArrowLeft, Heart, AlertCircle, CheckCircle, Clock, Users, Beaker, Info } from "lucide-react";
 import { getIngredientById } from "@/data/ingredients";
 import { makeupTips } from "@/data/tips";
 
@@ -69,7 +69,23 @@ export default function IngredientDetailPage() {
         {/* 한 줄 설명 */}
         <div className="card mb-4">
           <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{ingredient.description}</p>
+          {ingredient.casNo && (
+            <p className="text-xs text-gray-400 dark:text-gray-500 mt-3 pt-3 border-t border-gray-100 dark:border-gray-700">
+              CAS No. {ingredient.casNo} · 출처: 식품의약품안전처
+            </p>
+          )}
         </div>
+
+        {/* 작용 메커니즘 */}
+        {ingredient.efficacy && (
+          <div className="card mb-4 bg-gradient-to-br from-teal-50 to-emerald-50 dark:from-teal-900/20 dark:to-emerald-900/20 border-teal-100 dark:border-teal-800">
+            <h3 className="font-semibold mb-3 flex items-center gap-2 text-gray-900 dark:text-gray-100">
+              <Beaker size={18} className="text-teal-600 dark:text-teal-400" />
+              어떻게 작용해요?
+            </h3>
+            <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">{ingredient.efficacy}</p>
+          </div>
+        )}
 
         {/* 효능 */}
         <div className="card mb-4">

@@ -15,16 +15,21 @@ interface APIIngredient {
 
 export default function SearchPage() {
   const [query, setQuery] = useState("");
+  const [apiQuery, setApiQuery] = useState("");
   const [results, setResults] = useState<Ingredient[]>(ingredients);
   const [apiResults, setApiResults] = useState<APIIngredient[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showAPIData, setShowAPIData] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("전체");
+  const [showAllResults, setShowAllResults] = useState(false);
+  
+  const INITIAL_DISPLAY_COUNT = 5;
 
   const categories = ["전체", "보습", "미백", "안티에이징", "진정"];
 
   const handleSearch = (value: string) => {
     setQuery(value);
+    setShowAllResults(false); // 검색 시 더보기 상태 초기화
     if (value.trim() === "") {
       setResults(ingredients);
     } else {
@@ -33,11 +38,11 @@ export default function SearchPage() {
   };
 
   const searchFromAPI = async () => {
-    if (!query.trim()) return;
+    if (!apiQuery.trim()) return;
     
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/ingredients?keyword=${encodeURIComponent(query)}`);
+      const response = await fetch(`/api/ingredients?keyword=${encodeURIComponent(apiQuery)}`);
       const data = await response.json();
       
       if (data.success) {
@@ -125,7 +130,7 @@ export default function SearchPage() {
         </p>
         
         <div className="space-y-3">
-          {results.map((ing) => (
+          {(showAllResults ? results : results.slice(0, INITIAL_DISPLAY_COUNT)).map((ing) => (
             <Link 
               key={ing.id} 
               href={`/ingredient/${ing.id}`}
@@ -153,30 +158,66 @@ export default function SearchPage() {
             </Link>
           ))}
 
+          {/* 더보기 버튼 */}
+          {results.length > INITIAL_DISPLAY_COUNT && !showAllResults && (
+            <button
+              onClick={() => setShowAllResults(true)}
+              className="w-full py-3 text-center text-teal-600 dark:text-teal-400 font-medium hover:bg-teal-50 dark:hover:bg-teal-900/20 rounded-xl transition-colors"
+            >
+              +{results.length - INITIAL_DISPLAY_COUNT}개 더보기
+            </button>
+          )}
+
+          {/* 접기 버튼 */}
+          {showAllResults && results.length > INITIAL_DISPLAY_COUNT && (
+            <button
+              onClick={() => setShowAllResults(false)}
+              className="w-full py-3 text-center text-gray-500 dark:text-gray-400 font-medium hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl transition-colors"
+            >
+              접기
+            </button>
+          )}
+
           {results.length === 0 && (
-            <div className="text-center py-12">
+            <div className="text-center py-8">
               <p className="text-gray-400 mb-2">검색 결과가 없어요</p>
-              <p className="text-sm text-gray-400">다른 키워드로 검색해보세요</p>
+              <p className="text-sm text-gray-400">아래 식약처 DB에서 검색해보세요!</p>
             </div>
           )}
         </div>
 
-        {/* 공공데이터 API 검색 버튼 */}
-        {query && (
-          <div className="mt-6 pt-6 border-t border-gray-100 dark:border-gray-800">
-            <button
-              onClick={searchFromAPI}
-              disabled={isLoading}
-              className="w-full flex items-center justify-center gap-2 bg-teal-50 dark:bg-teal-900/30 text-teal-600 dark:text-teal-400 rounded-2xl py-3.5 font-medium hover:bg-teal-100 dark:hover:bg-teal-900/50 transition-colors disabled:opacity-50"
-            >
-              <Database size={18} />
-              {isLoading ? '검색 중...' : '식약처 공공데이터에서 검색'}
-            </button>
-            <p className="text-xs text-gray-400 text-center mt-2">
-              출처: 식품의약품안전처 화장품 원료성분정보
+        {/* 공공데이터 API 검색 섹션 - 항상 표시 */}
+        <div className="mt-6 pt-6 border-t border-gray-100 dark:border-gray-800">
+          <div className="mb-4">
+            <h3 className="font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2 mb-1">
+              <Database size={18} className="text-teal-600 dark:text-teal-400" />
+              식약처 공공데이터 검색
+            </h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              원하는 성분이 없다면? 식약처 DB에서 검색해보세요
             </p>
           </div>
-        )}
+          
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={apiQuery}
+              onChange={(e) => setApiQuery(e.target.value)}
+              placeholder="검색할 성분명 입력"
+              className="flex-1 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 dark:text-gray-100 dark:placeholder:text-gray-500"
+            />
+            <button
+              onClick={searchFromAPI}
+              disabled={isLoading || !apiQuery.trim()}
+              className="px-5 py-3 bg-teal-600 text-white rounded-xl font-medium hover:bg-teal-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoading ? '...' : '검색'}
+            </button>
+          </div>
+          <p className="text-xs text-gray-400 text-center mt-3">
+            출처: 식품의약품안전처 화장품 원료성분정보
+          </p>
+        </div>
 
         {/* API 검색 결과 */}
         {showAPIData && apiResults.length > 0 && (
