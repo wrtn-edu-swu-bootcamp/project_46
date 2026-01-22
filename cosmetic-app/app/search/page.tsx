@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Search, ChevronRight, X, Database, Heart } from "lucide-react";
+import { Search, ChevronRight, X, Database, Heart, Sparkles } from "lucide-react";
 import { ingredients, searchIngredients, Ingredient } from "@/data/ingredients";
 
 interface APIIngredient {
@@ -30,6 +30,9 @@ export default function SearchPage() {
   const [selectedCategory, setSelectedCategory] = useState("전체");
   const [showAllResults, setShowAllResults] = useState(false);
   const [favorites, setFavorites] = useState<FavoriteItem[]>([]);
+  const [aiQuery, setAiQuery] = useState("");
+  const [aiResponse, setAiResponse] = useState("");
+  const [aiLoading, setAiLoading] = useState(false);
   
   const INITIAL_DISPLAY_COUNT = 5;
 
@@ -98,6 +101,34 @@ export default function SearchPage() {
       console.error('API 검색 오류:', error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  // AI 효능 검색
+  const searchWithAI = async () => {
+    if (!aiQuery.trim()) return;
+    
+    setAiLoading(true);
+    setAiResponse("");
+    
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: `"${aiQuery}" 화장품 성분의 효능과 특징을 간단명료하게 알려줘. 어떤 피부 타입에 좋은지, 주의사항이 있다면 함께 알려줘. 3-4문장으로 요약해줘.`
+        }),
+      });
+      
+      const data = await response.json();
+      if (data.response) {
+        setAiResponse(data.response);
+      }
+    } catch (error) {
+      console.error("AI 검색 오류:", error);
+      setAiResponse("검색 중 오류가 발생했어요. 다시 시도해주세요.");
+    } finally {
+      setAiLoading(false);
     }
   };
 
@@ -318,6 +349,62 @@ export default function SearchPage() {
             </div>
           </div>
         )}
+
+        {/* AI 효능 검색 섹션 */}
+        <div className="mt-6 pt-6 border-t border-gray-100 dark:border-gray-800">
+          <div className="mb-4">
+            <h3 className="font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2 mb-1">
+              <Sparkles size={18} className="text-purple-500" />
+              효능을 더 정확히 알고 싶다면?
+            </h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              AI가 성분의 효능과 특징을 알려드려요
+            </p>
+          </div>
+          
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={aiQuery}
+              onChange={(e) => setAiQuery(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && searchWithAI()}
+              placeholder="성분명 입력 (예: 나이아신아마이드)"
+              className="flex-1 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 dark:text-gray-100 dark:placeholder:text-gray-500"
+            />
+            <button
+              onClick={searchWithAI}
+              disabled={aiLoading || !aiQuery.trim()}
+              className="px-5 py-3 bg-purple-500 text-white rounded-xl font-medium hover:bg-purple-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {aiLoading ? '...' : '검색'}
+            </button>
+          </div>
+
+          {/* AI 응답 */}
+          {aiResponse && (
+            <div className="mt-4 p-4 bg-purple-50 dark:bg-purple-900/20 rounded-xl border border-purple-100 dark:border-purple-800">
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Sparkles size={16} className="text-white" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-purple-700 dark:text-purple-300 mb-1">
+                    {aiQuery} 효능
+                  </p>
+                  <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed whitespace-pre-wrap">
+                    {aiResponse}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {aiLoading && (
+            <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-xl text-center">
+              <p className="text-gray-500 dark:text-gray-400 text-sm">AI가 분석 중이에요...</p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
