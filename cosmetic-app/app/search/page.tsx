@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Search, ChevronRight, X, Database } from "lucide-react";
+import { Search, ChevronRight, X, Database, Heart } from "lucide-react";
 import { ingredients, searchIngredients, Ingredient } from "@/data/ingredients";
 
 interface APIIngredient {
@@ -11,6 +11,13 @@ interface APIIngredient {
   CAS_NO: string;
   ORIGIN_MAJOR_KOR_NAME: string;
   INGR_SYNONYM: string;
+}
+
+interface FavoriteItem {
+  id: string;
+  type: "ingredient" | "tip";
+  name: string;
+  description: string;
 }
 
 export default function SearchPage() {
@@ -22,8 +29,46 @@ export default function SearchPage() {
   const [showAPIData, setShowAPIData] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("전체");
   const [showAllResults, setShowAllResults] = useState(false);
+  const [favorites, setFavorites] = useState<FavoriteItem[]>([]);
   
   const INITIAL_DISPLAY_COUNT = 5;
+
+  // 즐겨찾기 불러오기
+  useEffect(() => {
+    const saved = localStorage.getItem("favorites");
+    if (saved) {
+      setFavorites(JSON.parse(saved));
+    }
+  }, []);
+
+  // API 성분 즐겨찾기 확인
+  const isApiFavorite = (item: APIIngredient) => {
+    const id = `api-${item.CAS_NO || item.INGR_KOR_NAME}`;
+    return favorites.some(f => f.id === id);
+  };
+
+  // API 성분 즐겨찾기 토글
+  const toggleApiFavorite = (item: APIIngredient) => {
+    const id = `api-${item.CAS_NO || item.INGR_KOR_NAME}`;
+    const saved = localStorage.getItem("favorites");
+    let currentFavorites: FavoriteItem[] = saved ? JSON.parse(saved) : [];
+    
+    const exists = currentFavorites.some(f => f.id === id);
+    
+    if (exists) {
+      currentFavorites = currentFavorites.filter(f => f.id !== id);
+    } else {
+      currentFavorites.push({
+        id,
+        type: "ingredient",
+        name: item.INGR_KOR_NAME,
+        description: item.INGR_ENG_NAME || item.ORIGIN_MAJOR_KOR_NAME || "식약처 DB 성분",
+      });
+    }
+    
+    localStorage.setItem("favorites", JSON.stringify(currentFavorites));
+    setFavorites(currentFavorites);
+  };
 
   const categories = ["전체", "보습", "미백", "안티에이징", "진정"];
 
@@ -238,15 +283,29 @@ export default function SearchPage() {
               {apiResults.map((item, index) => (
                 <div key={index} className="card bg-teal-50/50 dark:bg-teal-900/20 border-teal-100 dark:border-teal-800">
                   <div className="flex items-start justify-between mb-2">
-                    <div>
+                    <div className="flex-1">
                       <h4 className="font-bold text-gray-900 dark:text-gray-100">{item.INGR_KOR_NAME}</h4>
                       <p className="text-sm text-gray-500 dark:text-gray-400">{item.INGR_ENG_NAME}</p>
                     </div>
-                    {item.CAS_NO && (
-                      <span className="text-xs bg-white dark:bg-gray-800 px-2 py-1 rounded-lg text-gray-500 dark:text-gray-400 border border-gray-100 dark:border-gray-700">
-                        CAS: {item.CAS_NO}
-                      </span>
-                    )}
+                    <div className="flex items-center gap-2">
+                      {item.CAS_NO && (
+                        <span className="text-xs bg-white dark:bg-gray-800 px-2 py-1 rounded-lg text-gray-500 dark:text-gray-400 border border-gray-100 dark:border-gray-700">
+                          CAS: {item.CAS_NO}
+                        </span>
+                      )}
+                      <button
+                        onClick={() => toggleApiFavorite(item)}
+                        className="p-2 rounded-full hover:bg-white/50 dark:hover:bg-gray-800/50 transition-colors"
+                      >
+                        <Heart 
+                          size={20} 
+                          className={isApiFavorite(item) 
+                            ? "fill-pink-500 text-pink-500" 
+                            : "text-gray-400 dark:text-gray-500"
+                          } 
+                        />
+                      </button>
+                    </div>
                   </div>
                   {item.ORIGIN_MAJOR_KOR_NAME && (
                     <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">{item.ORIGIN_MAJOR_KOR_NAME}</p>
