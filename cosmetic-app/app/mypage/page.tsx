@@ -146,8 +146,9 @@ export default function MyPage() {
 
       {/* 앱 정보 */}
       <div className="mt-8 text-center text-sm text-gray-400 dark:text-gray-500">
-        <p>버전 0.1.0 (MVP)</p>
-        <p className="mt-1">성분을 알면 화장법이 보인다</p>
+        <p className="font-medium text-emerald-700 dark:text-emerald-400">더마북 Dermabook</p>
+        <p className="mt-1">Made by 박소은 (isomerown@naver.com)</p>
+        <p className="mt-0.5">버전 0.1.0</p>
       </div>
     </div>
   );

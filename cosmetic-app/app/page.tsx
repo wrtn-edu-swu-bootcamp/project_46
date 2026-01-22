@@ -13,10 +13,13 @@ export default function Home() {
     <div className="px-5 py-8">
       {/* 헤더 */}
       <header className="mb-8">
-        <p className="text-gray-400 dark:text-gray-500 text-sm font-medium tracking-wide">WELCOME</p>
-        <h1 className="text-2xl font-bold mt-2 text-gray-900 dark:text-gray-100 leading-tight">
+        <p className="text-gray-400 dark:text-gray-500 text-sm font-medium tracking-wide mb-2">WELCOME TO DERMABOOK</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 leading-tight mb-3">
           오늘도 빛나는<br />피부를 위해 ✨
         </h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          식약처 공공데이터 기반 성분 검색 · AI 뷰티 상담
+        </p>
       </header>
 
       {/* 검색 바 */}
