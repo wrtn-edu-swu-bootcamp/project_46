@@ -4,8 +4,9 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, ChevronRight, User, Droplets, Check } from "lucide-react";
 
-const skinTypes = ["건성", "지성", "복합성", "중성", "민감성"];
+const skinTypes = ["건성", "지성", "복합성", "중성", "민감성", "수분 부족 지성"];
 const ageGroups = ["10대", "20대 초반", "20대 후반", "30대", "40대 이상"];
+const skinConcerns = ["모공", "주름", "트러블", "색소침착", "건조함", "번들거림", "민감함", "탄력저하"];
 
 export default function Onboarding() {
   const [showOnboarding, setShowOnboarding] = useState(false);
@@ -16,6 +17,7 @@ export default function Onboarding() {
   const [nickname, setNickname] = useState("");
   const [ageGroup, setAgeGroup] = useState("");
   const [skinType, setSkinType] = useState("");
+  const [concerns, setConcerns] = useState<string[]>([]);
 
   useEffect(() => {
     const hasVisited = localStorage.getItem("hasVisitedBefore");
@@ -28,12 +30,21 @@ export default function Onboarding() {
     setStep(2);
   };
 
+  const toggleConcern = (concern: string) => {
+    setConcerns(prev => 
+      prev.includes(concern) 
+        ? prev.filter(c => c !== concern)
+        : [...prev, concern]
+    );
+  };
+
   const handleComplete = () => {
     // 프로필 저장
     const profile = {
       nickname: nickname || "뷰티러버",
       ageGroup,
       skinType,
+      concerns,
     };
     localStorage.setItem("userProfile", JSON.stringify(profile));
     localStorage.setItem("hasVisitedBefore", "true");
@@ -241,7 +252,7 @@ export default function Onboarding() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
-                  className="mb-8"
+                  className="mb-6"
                 >
                   <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
                     <Droplets size={16} className="text-emerald-600" />
@@ -265,11 +276,39 @@ export default function Onboarding() {
                   </div>
                 </motion.div>
 
-                {/* 버튼 영역 */}
+                {/* 피부 고민 */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4 }}
+                  className="mb-8"
+                >
+                  <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                    <Sparkles size={16} className="text-emerald-600" />
+                    피부 고민 <span className="text-gray-400 font-normal">(복수 선택)</span>
+                  </label>
+                  <div className="grid grid-cols-4 gap-2">
+                    {skinConcerns.map((concern) => (
+                      <button
+                        key={concern}
+                        onClick={() => toggleConcern(concern)}
+                        className={`px-3 py-2 rounded-xl text-sm font-medium transition-all ${
+                          concerns.includes(concern)
+                            ? "bg-emerald-600 text-white"
+                            : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                        }`}
+                      >
+                        {concern}
+                      </button>
+                    ))}
+                  </div>
+                </motion.div>
+
+                {/* 버튼 영역 */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 }}
                   className="mt-auto space-y-3"
                 >
                   <button

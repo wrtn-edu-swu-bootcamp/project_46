@@ -83,7 +83,8 @@ export default function SettingsPage() {
           <button 
             onClick={() => {
               localStorage.removeItem("hasVisitedBefore");
-              alert("다음에 앱을 열면 시작 화면이 표시됩니다.");
+              localStorage.removeItem("userProfile");
+              window.location.href = "/";
             }}
             className="card w-full flex items-center gap-3 text-gray-700 dark:text-gray-300"
           >
