@@ -16,6 +16,7 @@ import {
 import { useTheme } from "@/contexts/ThemeContext";
 
 export default function MyPage() {
+  const [mounted, setMounted] = useState(false);
   const { theme, toggleTheme } = useTheme();
   const [user, setUser] = useState({
     name: "뷰티러버",
@@ -24,6 +25,7 @@ export default function MyPage() {
   });
 
   useEffect(() => {
+    setMounted(true);
     const savedProfile = localStorage.getItem("userProfile");
     if (savedProfile) {
       const profile = JSON.parse(savedProfile);
