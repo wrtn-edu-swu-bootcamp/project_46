@@ -88,9 +88,9 @@ export default function Home() {
       {/* 피부 타입별 맞춤 추천 */}
       {userSkinType && personalizedIngredients.length > 0 && (
         <section className="mb-10">
-          <div className="bg-gradient-to-br from-pink-50 to-purple-50 dark:from-pink-900/20 dark:to-purple-900/20 rounded-3xl p-5 border border-pink-100/50 dark:border-pink-800/30">
+          <div className="bg-gray-50 dark:bg-gray-900 rounded-3xl p-5 border border-gray-100 dark:border-gray-800">
             <div className="flex items-center gap-2 mb-3">
-              <Star size={18} className="text-pink-500" />
+              <Star size={18} className="text-emerald-600 dark:text-emerald-400" />
               <h2 className="font-bold text-gray-900 dark:text-gray-100">
                 {userSkinType} 피부라면?
               </h2>
@@ -104,9 +104,9 @@ export default function Home() {
                 <Link 
                   key={ing.id}
                   href={`/ingredient/${ing.id}`}
-                  className="flex items-center gap-3 bg-white/70 dark:bg-gray-800/50 rounded-xl p-3 hover:bg-white dark:hover:bg-gray-800 transition-colors"
+                  className="flex items-center gap-3 bg-white dark:bg-gray-800 rounded-xl p-3 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors border border-gray-100 dark:border-gray-700"
                 >
-                  <div className="w-10 h-10 bg-pink-100 dark:bg-pink-900/30 rounded-xl flex items-center justify-center text-lg">
+                  <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl flex items-center justify-center text-lg">
                     ✨
                   </div>
                   <div className="flex-1 min-w-0">
@@ -120,7 +120,7 @@ export default function Home() {
             
             <Link 
               href="/search"
-              className="mt-4 flex items-center justify-center gap-1 text-sm font-medium text-pink-600 dark:text-pink-400 hover:text-pink-700 dark:hover:text-pink-300"
+              className="mt-4 flex items-center justify-center gap-1 text-sm font-medium text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300"
             >
               더 많은 성분 검색하기 <ChevronRight size={14} />
             </Link>
