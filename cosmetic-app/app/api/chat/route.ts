@@ -22,11 +22,22 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     message = body.message;
     const history = body.history || [];
+    const userProfile = body.userProfile || {};
 
     const apiKey = process.env.GROQ_API_KEY;
     
     if (!apiKey) {
       throw new Error('GROQ API 키가 설정되지 않았습니다.');
+    }
+
+    // 사용자 프로필 기반 시스템 프롬프트 확장
+    let enhancedPrompt = SYSTEM_PROMPT;
+    if (userProfile.skinType) {
+      enhancedPrompt += `\n\n사용자 정보:\n- 피부 타입: ${userProfile.skinType}`;
+      if (userProfile.concerns && userProfile.concerns.length > 0) {
+        enhancedPrompt += `\n- 피부 고민: ${userProfile.concerns.join(', ')}`;
+      }
+      enhancedPrompt += `\n\n사용자가 피부 타입을 언급하지 않아도, 위 정보를 바탕으로 맞춤 조언을 제공하세요. 성분 추천 시 사용자의 피부 타입에 적합한 성분을 우선적으로 추천하세요.`;
     }
 
     // Groq API (OpenAI 호환)
@@ -39,7 +50,7 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify({
         model: 'llama-3.3-70b-versatile',
         messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
+          { role: 'system', content: enhancedPrompt },
           ...history.map((msg: { role: string; content: string }) => ({
             role: msg.role,
             content: msg.content,

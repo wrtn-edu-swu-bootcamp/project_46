@@ -20,7 +20,19 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [userProfile, setUserProfile] = useState<{skinType?: string; concerns?: string[]}>({});
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const savedProfile = localStorage.getItem("userProfile");
+    if (savedProfile) {
+      const profile = JSON.parse(savedProfile);
+      setUserProfile({
+        skinType: profile.skinType,
+        concerns: profile.concerns || [],
+      });
+    }
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -45,6 +57,7 @@ export default function ChatPage() {
         body: JSON.stringify({
           message: text,
           history: messages,
+          userProfile: userProfile,
         }),
       });
 
