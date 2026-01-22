@@ -88,7 +88,7 @@ export default function Home() {
       {/* 피부 타입별 맞춤 추천 */}
       {userSkinType && personalizedIngredients.length > 0 && (
         <section className="mb-10">
-          <div className="bg-gray-50 dark:bg-gray-900 rounded-3xl p-5 border border-gray-100 dark:border-gray-800">
+          <div className="bg-gray-100/50 dark:bg-gray-900/50 rounded-3xl p-5 border border-gray-200/50 dark:border-gray-800/50">
             <div className="flex items-center gap-2 mb-3">
               <Star size={18} className="text-emerald-600 dark:text-emerald-400" />
               <h2 className="font-bold text-gray-900 dark:text-gray-100">
@@ -104,7 +104,7 @@ export default function Home() {
                 <Link 
                   key={ing.id}
                   href={`/ingredient/${ing.id}`}
-                  className="flex items-center gap-3 bg-white dark:bg-gray-800 rounded-xl p-3 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors border border-gray-100 dark:border-gray-700"
+                  className="flex items-center gap-3 bg-white dark:bg-gray-800 rounded-xl p-3 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors border border-gray-200/50 dark:border-gray-700/50"
                 >
                   <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl flex items-center justify-center text-lg">
                     ✨
