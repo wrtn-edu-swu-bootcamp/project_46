@@ -31,6 +31,7 @@ export default function MyPage() {
       const profile = JSON.parse(savedProfile);
       setUser(prev => ({
         ...prev,
+        name: profile.nickname || "뷰티러버",
         skinType: profile.skinType || "미설정",
         concerns: profile.concerns || [],
       }));
