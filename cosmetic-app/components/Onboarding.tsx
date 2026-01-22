@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, ChevronRight, User, Droplets, Check } from "lucide-react";
 
 const skinTypes = ["건성", "지성", "복합성", "중성", "민감성", "수분 부족 지성"];
-const ageGroups = ["10대", "20대 초반", "20대 후반", "30대", "40대 이상"];
+const ageGroups = ["10대", "20대", "30대", "40대 이상"];
 const skinConcerns = ["모공", "주름", "트러블", "색소침착", "건조함", "번들거림", "민감함", "탄력저하"];
 
 export default function Onboarding() {
