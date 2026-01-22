@@ -50,8 +50,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
 export function useTheme() {
   const context = useContext(ThemeContext);
+  // SSR/SSG 시 기본값 반환
   if (context === undefined) {
-    throw new Error("useTheme must be used within a ThemeProvider");
+    return { theme: "light" as const, toggleTheme: () => {} };
   }
   return context;
 }
