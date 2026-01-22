@@ -13,7 +13,7 @@ export default function Home() {
     <div className="px-5 py-8">
       {/* 헤더 */}
       <header className="mb-8">
-        <p className="text-gray-400 dark:text-gray-500 text-sm font-medium tracking-wide mb-2">WELCOME TO DERMABOOK</p>
+        <p className="text-emerald-700 dark:text-emerald-400 text-sm font-bold tracking-wide mb-2">DERMABOOK</p>
         <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 leading-tight mb-3">
           오늘도 빛나는<br />피부를 위해 ✨
         </h1>
