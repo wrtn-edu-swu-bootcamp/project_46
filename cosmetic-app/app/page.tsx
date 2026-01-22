@@ -1,13 +1,52 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Search, ChevronRight, Sparkles, ArrowRight } from "lucide-react";
-import { ingredients } from "@/data/ingredients";
+import { Search, ChevronRight, Sparkles, ArrowRight, Star } from "lucide-react";
+import { ingredients, Ingredient } from "@/data/ingredients";
 import { makeupTips } from "@/data/tips";
 
 export default function Home() {
+  const [userSkinType, setUserSkinType] = useState<string | null>(null);
+  const [personalizedIngredients, setPersonalizedIngredients] = useState<Ingredient[]>([]);
+  
   const recommendedIngredients = ingredients.slice(0, 3);
   const recommendedTips = makeupTips.slice(0, 2);
+
+  useEffect(() => {
+    const savedProfile = localStorage.getItem("userProfile");
+    if (savedProfile) {
+      const profile = JSON.parse(savedProfile);
+      if (profile.skinType) {
+        setUserSkinType(profile.skinType);
+        
+        // 피부 타입에 맞는 성분 필터링
+        const matched = ingredients.filter(ing => {
+          // "모든 피부"는 모두에게 추천
+          if (ing.skinTypes.includes("모든 피부")) return true;
+          
+          // 피부 타입 매칭
+          const skinTypeMap: { [key: string]: string[] } = {
+            "건성": ["건성"],
+            "지성": ["지성"],
+            "복합성": ["복합성", "지성"],
+            "민감성": ["민감성"],
+            "수분 부족 지성": ["지성", "건성"],
+            "중성": ["모든 피부"],
+            "트러블성": ["트러블성", "여드름성", "지성"],
+          };
+          
+          const matchTypes = skinTypeMap[profile.skinType] || [];
+          return ing.skinTypes.some(st => matchTypes.includes(st));
+        });
+        
+        // 랜덤하게 3개 선택 (좋음 등급 우선)
+        const goodOnes = matched.filter(ing => ing.rating === "good");
+        const shuffled = goodOnes.sort(() => Math.random() - 0.5);
+        setPersonalizedIngredients(shuffled.slice(0, 3));
+      }
+    }
+  }, []);
 
   return (
     <div className="px-5 py-8">
@@ -31,7 +70,7 @@ export default function Home() {
       </Link>
 
       {/* AI 상담 버튼 */}
-      <Link href="/chat" className="block mb-10">
+      <Link href="/chat" className="block mb-6">
         <div className="bg-white dark:bg-gray-900 rounded-2xl px-5 py-4 shadow-soft border border-gray-100 dark:border-gray-800">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-teal-50 dark:bg-teal-900/30 rounded-xl flex items-center justify-center">
@@ -45,6 +84,49 @@ export default function Home() {
           </div>
         </div>
       </Link>
+
+      {/* 피부 타입별 맞춤 추천 */}
+      {userSkinType && personalizedIngredients.length > 0 && (
+        <section className="mb-10">
+          <div className="bg-gradient-to-br from-pink-50 to-purple-50 dark:from-pink-900/20 dark:to-purple-900/20 rounded-3xl p-5 border border-pink-100/50 dark:border-pink-800/30">
+            <div className="flex items-center gap-2 mb-3">
+              <Star size={18} className="text-pink-500" />
+              <h2 className="font-bold text-gray-900 dark:text-gray-100">
+                {userSkinType} 피부라면?
+              </h2>
+            </div>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              이런 성분을 추천해요
+            </p>
+            
+            <div className="space-y-2">
+              {personalizedIngredients.map((ing) => (
+                <Link 
+                  key={ing.id}
+                  href={`/ingredient/${ing.id}`}
+                  className="flex items-center gap-3 bg-white/70 dark:bg-gray-800/50 rounded-xl p-3 hover:bg-white dark:hover:bg-gray-800 transition-colors"
+                >
+                  <div className="w-10 h-10 bg-pink-100 dark:bg-pink-900/30 rounded-xl flex items-center justify-center text-lg">
+                    ✨
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-gray-900 dark:text-gray-100 text-sm">{ing.name}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{ing.shortDescription}</p>
+                  </div>
+                  <ChevronRight size={16} className="text-gray-400" />
+                </Link>
+              ))}
+            </div>
+            
+            <Link 
+              href="/search"
+              className="mt-4 flex items-center justify-center gap-1 text-sm font-medium text-pink-600 dark:text-pink-400 hover:text-pink-700 dark:hover:text-pink-300"
+            >
+              더 많은 성분 검색하기 <ChevronRight size={14} />
+            </Link>
+          </div>
+        </section>
+      )}
 
       {/* 오늘의 팁 */}
       <section className="mb-10">
