@@ -121,8 +121,10 @@ export default function SearchPage() {
       });
       
       const data = await response.json();
-      if (data.response) {
-        setAiResponse(data.response);
+      if (data.success && data.message) {
+        setAiResponse(data.message);
+      } else {
+        setAiResponse("응답을 받지 못했어요. 다시 시도해주세요.");
       }
     } catch (error) {
       console.error("AI 검색 오류:", error);
