@@ -54,7 +54,7 @@ export default function TipsPage() {
             href={`/tips/${tip.id}`}
             className="card flex gap-4"
           >
-            <div className="w-16 h-16 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0">
+            <div className="w-16 h-16 bg-emerald-800 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0">
               {tip.thumbnail}
             </div>
             <div className="flex-1 min-w-0">

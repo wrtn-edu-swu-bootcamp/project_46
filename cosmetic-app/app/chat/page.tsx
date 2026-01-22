@@ -116,7 +116,7 @@ export default function ChatPage() {
           <div className="px-5 py-10">
             {/* 웰컴 카드 */}
             <div className="bg-white dark:bg-gray-900 rounded-3xl p-6 shadow-sm dark:shadow-none dark:border dark:border-gray-800 mb-6">
-              <div className="w-14 h-14 bg-emerald-700 rounded-2xl flex items-center justify-center mb-4 shadow-lg shadow-emerald-700/20">
+              <div className="w-14 h-14 bg-emerald-800 rounded-2xl flex items-center justify-center mb-4 shadow-lg shadow-emerald-800/20">
                 <Sparkles size={28} className="text-white" />
               </div>
               <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
@@ -154,7 +154,7 @@ export default function ChatPage() {
                 }`}
               >
                 {message.role === "assistant" && (
-                  <div className="w-9 h-9 bg-gradient-to-br from-teal-400 to-emerald-500 rounded-xl flex items-center justify-center flex-shrink-0 mr-2 shadow-sm">
+                  <div className="w-9 h-9 bg-emerald-800 rounded-xl flex items-center justify-center flex-shrink-0 mr-2 shadow-sm">
                     <Sparkles size={18} className="text-white" />
                   </div>
                 )}
@@ -175,7 +175,7 @@ export default function ChatPage() {
             {/* 로딩 인디케이터 */}
             {isLoading && (
               <div className="flex justify-start">
-                <div className="w-9 h-9 bg-gradient-to-br from-teal-400 to-emerald-500 rounded-xl flex items-center justify-center flex-shrink-0 mr-2 shadow-sm">
+                <div className="w-9 h-9 bg-emerald-800 rounded-xl flex items-center justify-center flex-shrink-0 mr-2 shadow-sm">
                   <Sparkles size={18} className="text-white" />
                 </div>
                 <div className="bg-white dark:bg-gray-800 px-5 py-4 rounded-[20px] rounded-bl-md shadow-sm dark:shadow-none">
