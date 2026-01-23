@@ -19,7 +19,7 @@ export default function MyPage() {
   const [mounted, setMounted] = useState(false);
   const { theme, toggleTheme } = useTheme();
   const [user, setUser] = useState({
-    name: "뷰티러버",
+    name: "비회원",
     skinType: "미설정",
     concerns: [] as string[],
   });
@@ -31,7 +31,7 @@ export default function MyPage() {
       const profile = JSON.parse(savedProfile);
       setUser(prev => ({
         ...prev,
-        name: profile.nickname || "뷰티러버",
+        name: profile.nickname || "비회원",
         skinType: profile.skinType || "미설정",
         concerns: profile.concerns || [],
       }));
@@ -95,7 +95,7 @@ export default function MyPage() {
       <div className="card mb-6">
         <div className="flex items-center gap-4 mb-4">
           <div className="w-16 h-16 bg-gradient-to-br from-emerald-600 to-teal-700 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-600/30">
-            <Droplets size={32} className="text-white" />
+            <Sparkles size={32} className="text-white/90" />
           </div>
           <div>
             <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">{user.name}</h2>
@@ -152,6 +152,10 @@ export default function MyPage() {
         <p className="font-medium text-emerald-700 dark:text-emerald-400">더마북 Dermabook</p>
         <p className="mt-1">Made by 박소은 (isomerown@naver.com)</p>
         <p className="mt-0.5">버전 0.1.0</p>
+        <p className="mt-3 text-xs text-gray-400 dark:text-gray-600 leading-relaxed">
+          © 2026 Dermabook. All rights reserved.<br />
+          무단 복제 및 재배포 금지
+        </p>
       </div>
     </div>
   );

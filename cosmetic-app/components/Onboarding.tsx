@@ -41,7 +41,7 @@ export default function Onboarding() {
   const handleComplete = () => {
     // 프로필 저장
     const profile = {
-      nickname: nickname || "뷰티러버",
+      nickname: nickname || "비회원",
       ageGroup,
       skinType,
       concerns,
@@ -214,7 +214,7 @@ export default function Onboarding() {
                     type="text"
                     value={nickname}
                     onChange={(e) => setNickname(e.target.value)}
-                    placeholder="뷰티러버"
+                    placeholder="홍길동"
                     maxLength={10}
                     className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
                   />
