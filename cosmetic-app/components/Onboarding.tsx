@@ -52,6 +52,8 @@ export default function Onboarding() {
     setIsExiting(true);
     setTimeout(() => {
       setShowOnboarding(false);
+      // 프로필 저장 후 페이지 새로고침하여 홈 화면에 추천 성분 바로 표시
+      window.location.reload();
     }, 500);
   };
 
