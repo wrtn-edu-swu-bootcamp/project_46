@@ -3,10 +3,11 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Bell, Moon, Trash2, Info, RotateCcw } from "lucide-react";
+import { useTheme } from "@/contexts/ThemeContext";
 
 export default function SettingsPage() {
   const [notifications, setNotifications] = useState(true);
-  const [darkMode, setDarkMode] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   const clearAllData = () => {
     if (confirm("모든 데이터를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.")) {
@@ -58,21 +59,16 @@ export default function SettingsPage() {
               <span className="text-gray-900 dark:text-gray-100">다크 모드</span>
             </div>
             <button
-              onClick={() => setDarkMode(!darkMode)}
+              onClick={toggleTheme}
               className={`w-12 h-7 rounded-full transition-colors ${
-                darkMode ? "bg-primary-600" : "bg-gray-300 dark:bg-gray-600"
+                theme === "dark" ? "bg-emerald-600" : "bg-gray-300 dark:bg-gray-600"
               }`}
             >
               <div className={`w-5 h-5 bg-white rounded-full shadow transition-transform mx-1 ${
-                darkMode ? "translate-x-5" : "translate-x-0"
+                theme === "dark" ? "translate-x-5" : "translate-x-0"
               }`} />
             </button>
           </div>
-          {darkMode && (
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
-              (마이페이지에서 다크 모드를 켜세요)
-            </p>
-          )}
         </div>
       </section>
 
